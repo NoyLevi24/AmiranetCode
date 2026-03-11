@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סימולציית אמירנ"ט מלאה</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div id="welcome-screen" class="screen active">
+        <div class="container">
+            <div class="header">
+                <h1>🎓 סימולציה מלאה - מבחן אמירנ"ט</h1>
+                <p class="subtitle">מבחן אדפטיבי מדמה מציאות</p>
+            </div>
+            
+            <div class="info-box">
+                <h2>מבנה המבחן (44 שאלות)</h2>
+                <ul class="exam-structure">
+                    <li><strong>השלמת משפטים:</strong> 2 פרקים, 20 שאלות סה"כ</li>
+                    <li><strong>ניסוח מחדש:</strong> 2 פרקים, 12 שאלות סה"כ</li>
+                    <li><strong>הבנת הנקרא:</strong> 2 קטעים אקדמיים, 12 שאלות סה"כ</li>
+                </ul>
+                <div class="total-time">
+                    <strong>זמן משוער:</strong> 75 דקות | ציון בטווח 50-150
+                </div>
+            </div>
+
+            <button id="start-btn" class="btn-primary">צור מבחן והתחל</button>
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>מייצר 44 שאלות אקדמיות... זה עשוי לקחת כ-20 שניות</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="exam-screen" class="screen">
+        <div class="exam-header">
+            <div class="section-info">
+                <span id="section-title">טוען פרק...</span>
+                <span id="section-progress"></span>
+            </div>
+            <div class="timer-box">
+                <div id="timer" class="timer">00:00</div>
+            </div>
+        </div>
+
+        <div class="exam-container">
+            <div class="instructions" id="instructions"></div>
+            <div id="passage-box" class="passage-box" style="display: none;">
+                <div id="passage-text" class="passage-text"></div>
+            </div>
+            <div id="question-container" class="question-container">
+                <div class="question-text" id="question-text"></div>
+                <div class="options" id="options"></div>
+            </div>
+            <div class="navigation">
+                <div class="question-nav" id="question-nav"></div>
+                <div class="action-buttons">
+                    <button id="prev-question" class="btn-secondary">◄ הקודם</button>
+                    <button id="next-question" class="btn-secondary">הבא ►</button>
+                    <button id="finish-section" class="btn-primary" style="display: none;">סיים פרק</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="summary-screen" class="screen">
+        <div class="container">
+            <div class="summary-header">
+                <h1>תוצאות המבחן</h1>
+                <div class="score-display">
+                    <div id="final-score" class="final-score">0</div>
+                    <div class="score-range">ציון אמירנ"ט משוער</div>
+                </div>
+            </div>
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div id="correct-count" class="stat-value">0</div>
+                    <div class="stat-label">נכונות</div>
+                </div>
+                <div class="stat-box">
+                    <div id="accuracy" class="stat-value">0%</div>
+                    <div class="stat-label">דיוק</div>
+                </div>
+            </div>
+            <div id="detailed-results" class="detailed-results"></div>
+            <button onclick="location.reload()" class="btn-primary">מבחן חדש</button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+name: Push Docker Image to Docker Hub
+
+on:
+  workflow_dispatch:
+    inputs:
+      docker_tag:
+        description: 'Docker tag'
+        required: true
+        default: 'latest'
+        type: string
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_USERNAME }}/amiranet
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log into Docker Hub
+        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@ac9327eae2b366085ac7f6a2d02df8aa8ead720a
+        with:
+          context: ./image-updater/source-code
+          file: ./image-updater/source-code/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:${{ inputs.docker_tag }}
+
+      - name: Checkout GitOps repository
+        uses: actions/checkout@v3
+        with:
+          repository: NoyLevi24/AmiranetGitOps
+          token: ${{ secrets.GITOPS_TOKEN }}
+          path: AmiranetGitOps
+
+      - name: Update image version in qa-values.yaml
+        run: |
+          sed -i 's/imageVersion: .*/imageVersion: "${{ inputs.docker_tag }}"/' \
+            AmiranetGitOps/manifests/amiranet-appset/my-values/app-version/qa-values.yaml
+
+      - name: Commit and push to GitOps repository
+        run: |
+          cd AmiranetGitOps
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add manifests/amiranet-appset/my-values/app-version/qa-values.yaml
+          git commit -m "ci: update QA image version to ${{ inputs.docker_tag }}"
+          git push
