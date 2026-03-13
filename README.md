@@ -83,5 +83,5 @@ Configure these in **GitHub → Settings → Secrets and variables → Actions:*
 | Secret | Description |
 |---|---|
 | `DOCKERHUB_USERNAME` | Docker Hub username |
-| `DOCKERHUB_TOKEN` | Docker Hub access token |
+| `DOCKERHUB_PASSWORD` | Docker Hub access token |
 | `GITOPS_TOKEN` | GitHub PAT with `repo` scope on AmiranetGitOps |
