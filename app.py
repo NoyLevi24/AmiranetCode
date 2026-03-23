@@ -120,7 +120,7 @@ def generate_exam():
         selected_categories = random.sample(categories, 2)
         cat1, cat2 = selected_categories[0], selected_categories[1]
 
-        prompt = f"""Create a realistic, full-length AMIRNET English proficiency exam in JSON format.
+        prompt = """Create a realistic, full-length AMIRNET English proficiency exam in JSON format.
 
 The exam must have EXACTLY 6 sections with a total of 44 questions:
 - Sections 1 & 2: Sentence Completion (10 questions each, total 20)
